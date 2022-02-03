@@ -134,6 +134,10 @@ def generate_launch_description():
                                   'params_file': params_file,
                                   'autostart': autostart,
                                   'use_rviz': 'False',
+
+                                #   'slam': 'true',
+                                  'slam': 'True',
+
                                   'use_simulator': 'False',
                                   'headless': 'False',
                                   'use_robot_state_pub': use_robot_state_pub,

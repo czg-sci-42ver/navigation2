@@ -54,6 +54,7 @@ def generate_launch_description():
     # Create our own temporary YAML files that include substitutions
     param_substitutions = {
         'use_sim_time': use_sim_time,
+        # 'use_sim_time': test_time,
         'yaml_filename': map_yaml_file}
 
     configured_params = RewrittenYaml(
@@ -110,6 +111,8 @@ def generate_launch_description():
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(os.path.join(launch_dir, 'slam_launch.py')),
+
+            # PythonLaunchDescriptionSource(os.path.join(launch_dir, 'slam_cartographer_launch.py')),
             condition=IfCondition(slam),
             launch_arguments={'namespace': namespace,
                               'use_sim_time': use_sim_time,
