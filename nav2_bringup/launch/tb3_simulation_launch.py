@@ -154,7 +154,8 @@ def generate_launch_description():
     # Specify the actions
     start_gazebo_server_cmd = ExecuteProcess(
         condition=IfCondition(use_simulator),
-        cmd=['gzserver', '-s', 'libgazebo_ros_init.so',  '-s', 'libgazebo_ros_factory.so', world],
+        cmd=['gzserver', '-s', 'libgazebo_ros_init.so',
+             '-s', 'libgazebo_ros_factory.so', world],
         cwd=[launch_dir], output='screen')
 
     start_gazebo_client_cmd = ExecuteProcess(
@@ -200,6 +201,7 @@ def generate_launch_description():
     bringup_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(launch_dir, 'bringup_launch.py')),
+        #  call navigation_launch.py and localization_launch.py/slam_launch.py
         launch_arguments={'namespace': namespace,
                           'use_namespace': use_namespace,
                           'slam': slam,

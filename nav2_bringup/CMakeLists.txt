@@ -16,6 +16,8 @@ find_package(nav2_lifecycle_manager REQUIRED)
 
 nav2_package()
 
+# add_compile_options(-g)
+
 set(executable_name composed_bringup)
 add_executable(${executable_name}
   src/composed_bringup.cpp

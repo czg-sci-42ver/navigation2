@@ -281,6 +281,7 @@ void Costmap2D::setCost(unsigned int mx, unsigned int my, unsigned char cost)
 void Costmap2D::mapToWorld(unsigned int mx, unsigned int my, double & wx, double & wy) const
 {
   wx = origin_x_ + (mx + 0.5) * resolution_;
+  // calculate centre ordinates
   wy = origin_y_ + (my + 0.5) * resolution_;
 }
 

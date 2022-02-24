@@ -102,6 +102,7 @@ def generate_launch_description():
     declare_use_composition_cmd = DeclareLaunchArgument(
         'use_composition', default_value='True',
         description='Whether to use composed bringup')
+    # print(use_composition)
 
     # Specify the actions
     bringup_cmd_group = GroupAction([
@@ -110,7 +111,8 @@ def generate_launch_description():
             namespace=namespace),
 
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(os.path.join(launch_dir, 'slam_launch.py')),
+            PythonLaunchDescriptionSource(
+                os.path.join(launch_dir, 'slam_launch.py')),
 
             # PythonLaunchDescriptionSource(os.path.join(launch_dir, 'slam_cartographer_launch.py')),
             condition=IfCondition(slam),
@@ -135,10 +137,12 @@ def generate_launch_description():
             executable='composed_bringup',
             output='screen',
             parameters=[configured_params, {'autostart': autostart}],
+            # prefix=['xterm -e gdb -ex run --args'],
             remappings=remappings),
 
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(os.path.join(launch_dir, 'navigation_launch.py')),
+            PythonLaunchDescriptionSource(os.path.join(
+                launch_dir, 'navigation_launch.py')),
             condition=IfCondition(PythonExpression(['not ', use_composition])),
             launch_arguments={'namespace': namespace,
                               'use_sim_time': use_sim_time,
