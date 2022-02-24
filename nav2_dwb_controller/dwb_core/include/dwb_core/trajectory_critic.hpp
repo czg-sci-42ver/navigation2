@@ -102,7 +102,8 @@ public:
     name_ = name;
     costmap_ros_ = costmap_ros;
     dwb_plugin_name_ = ns;
-    RCLCPP_INFO(rclcpp::get_logger("5teb"), "critic name_ %s ", name_.c_str());
+    // RCLCPP_INFO(rclcpp::get_logger("5teb"), "critic name_ %s ",
+    // name_.c_str());
     if (!nh->has_parameter(dwb_plugin_name_ + "." + name_ + ".scale")) {
       nh->declare_parameter(dwb_plugin_name_ + "." + name_ + ".scale",
                             rclcpp::ParameterValue(1.0));
