@@ -40,6 +40,7 @@ def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time')
     params_file = LaunchConfiguration('params_file')
     autostart = LaunchConfiguration('autostart')
+    bond_timeout = LaunchConfiguration('bond_timeout')
     use_composition = LaunchConfiguration('use_composition')
 
     # Map fully qualified names to relative ones so the node's namespace can be prepended.
@@ -98,6 +99,9 @@ def generate_launch_description():
     declare_autostart_cmd = DeclareLaunchArgument(
         'autostart', default_value='true',
         description='Automatically startup the nav2 stack')
+    declare_bond_timeout_cmd = DeclareLaunchArgument(
+        'bond_timeout', default_value='8.0',
+        description='Automatically startup the nav2 stack')
 
     declare_use_composition_cmd = DeclareLaunchArgument(
         'use_composition', default_value='True',
@@ -136,8 +140,21 @@ def generate_launch_description():
             package='nav2_bringup',
             executable='composed_bringup',
             output='screen',
-            parameters=[configured_params, {'autostart': autostart}],
-            # prefix=['xterm -e gdb -ex run --args'],
+            parameters=[configured_params, {'autostart': autostart}, {
+                'bond_timeout': bond_timeout}],
+            # prefix=['xterm -e script ~/test_bringup.log -c "gdb -ex run --args"'],
+            # prefix=['xterm -e "gdb -ex run --args" 2>&1 /home/czg/test_bringup.log '],
+            # prefix=['xterm -e gdb -x ~/.gdbinit_x -ex run --args'],
+            # prefix=['gnome-terminal -- gdb -ex run --args /home/czg/vgcore.7048'],
+            prefix=['gnome-terminal -- gdb -ex run --args'],
+
+            # prefix=[
+            #     'valgrind --leak-check=full --show-leak-kinds=all -s --track-origins=yes'],
+            # prefix=[
+            #     'valgrind --log-file=/home/czg/teb_val.log --leak-check=full --show-leak-kinds=all -s --track-origins=yes --verbose'],
+
+            # prefix=['/home/czg/gdb_tmux.tmux'],
+            # prefix=['screen -d -m gdb -ex run --args'],
             remappings=remappings),
 
         IncludeLaunchDescription(
@@ -164,6 +181,7 @@ def generate_launch_description():
     ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(declare_params_file_cmd)
     ld.add_action(declare_autostart_cmd)
+    ld.add_action(declare_bond_timeout_cmd)
     ld.add_action(declare_use_composition_cmd)
 
     # Add the actions to launch all of the navigation nodes

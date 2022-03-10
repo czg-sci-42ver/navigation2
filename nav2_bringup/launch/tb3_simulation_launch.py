@@ -39,6 +39,7 @@ def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time')
     params_file = LaunchConfiguration('params_file')
     autostart = LaunchConfiguration('autostart')
+    bond_timeout = LaunchConfiguration('bond_timeout')
     use_composition = LaunchConfiguration('use_composition')
 
     # Launch configuration variables specific to simulation
@@ -100,6 +101,11 @@ def generate_launch_description():
 
     declare_autostart_cmd = DeclareLaunchArgument(
         'autostart', default_value='true',
+        description='Automatically startup the nav2 stack')
+
+# default 4s
+    declare_bond_timeout_cmd = DeclareLaunchArgument(
+        'bond_timeout', default_value='4.0',
         description='Automatically startup the nav2 stack')
 
     declare_use_composition_cmd = DeclareLaunchArgument(
@@ -209,6 +215,7 @@ def generate_launch_description():
                           'use_sim_time': use_sim_time,
                           'params_file': params_file,
                           'autostart': autostart,
+                          'bond_timeout': bond_timeout,
                           'use_composition': use_composition}.items())
 
     # Create the launch description and populate
@@ -222,6 +229,7 @@ def generate_launch_description():
     ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(declare_params_file_cmd)
     ld.add_action(declare_autostart_cmd)
+    ld.add_action(declare_bond_timeout_cmd)
     ld.add_action(declare_use_composition_cmd)
 
     ld.add_action(declare_rviz_config_file_cmd)
