@@ -42,6 +42,7 @@ def generate_launch_description():
     autostart = LaunchConfiguration('autostart')
     bond_timeout = LaunchConfiguration('bond_timeout')
     use_composition = LaunchConfiguration('use_composition')
+    use_debug = LaunchConfiguration('use_debug')
 
     # Map fully qualified names to relative ones so the node's namespace can be prepended.
     # In case of the transforms (tf), currently, there doesn't seem to be a better alternative
@@ -106,6 +107,9 @@ def generate_launch_description():
     declare_use_composition_cmd = DeclareLaunchArgument(
         'use_composition', default_value='True',
         description='Whether to use composed bringup')
+    declare_use_debug_cmd = DeclareLaunchArgument(
+        'use_debug', default_value='False',
+        description='Whether to use gdb')
     # print(use_composition)
 
     # Specify the actions
@@ -136,7 +140,8 @@ def generate_launch_description():
                               'params_file': params_file}.items()),
 
         Node(
-            condition=IfCondition(use_composition),
+            condition=IfCondition(PythonExpression(
+                ['not ', use_debug, ' and ', use_composition])),
             package='nav2_bringup',
             executable='composed_bringup',
             output='screen',
@@ -146,7 +151,7 @@ def generate_launch_description():
             # prefix=['xterm -e "gdb -ex run --args" 2>&1 /home/czg/test_bringup.log '],
             # prefix=['xterm -e gdb -x ~/.gdbinit_x -ex run --args'],
             # prefix=['gnome-terminal -- gdb -ex run --args /home/czg/vgcore.7048'],
-            prefix=['gnome-terminal -- gdb -ex run --args'],
+            # prefix=['gnome-terminal -- gdb -ex run --args'],
 
             # prefix=[
             #     'valgrind --leak-check=full --show-leak-kinds=all -s --track-origins=yes'],
@@ -155,6 +160,19 @@ def generate_launch_description():
 
             # prefix=['/home/czg/gdb_tmux.tmux'],
             # prefix=['screen -d -m gdb -ex run --args'],
+            remappings=remappings),
+        Node(
+            condition=IfCondition(PythonExpression(
+                [use_debug, ' and ', use_composition])),
+            package='nav2_bringup',
+            executable='composed_bringup',
+            output='screen',
+            parameters=[configured_params, {'autostart': autostart}, {
+                'bond_timeout': bond_timeout}],
+            # prefix=[
+            #     'gnome-terminal -- gdb -ex run -x /home/czg/teb_logs/dist.br --args'],
+            prefix=[
+                'gnome-terminal -- gdb -ex run  --args'],
             remappings=remappings),
 
         IncludeLaunchDescription(
@@ -183,6 +201,7 @@ def generate_launch_description():
     ld.add_action(declare_autostart_cmd)
     ld.add_action(declare_bond_timeout_cmd)
     ld.add_action(declare_use_composition_cmd)
+    ld.add_action(declare_use_debug_cmd)
 
     # Add the actions to launch all of the navigation nodes
     ld.add_action(bringup_cmd_group)

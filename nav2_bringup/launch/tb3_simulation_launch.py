@@ -48,6 +48,8 @@ def generate_launch_description():
     use_robot_state_pub = LaunchConfiguration('use_robot_state_pub')
     use_rviz = LaunchConfiguration('use_rviz')
     headless = LaunchConfiguration('headless')
+
+    use_debug = LaunchConfiguration('use_debug')
     world = LaunchConfiguration('world')
     pose = {'x': LaunchConfiguration('x_pose', default='-2.00'),
             'y': LaunchConfiguration('y_pose', default='-0.50'),
@@ -68,6 +70,11 @@ def generate_launch_description():
                   ('/tf_static', 'tf_static')]
 
     # Declare the launch arguments
+
+    declare_use_debug_cmd = DeclareLaunchArgument(
+        'use_debug', default_value='False',
+        description='Whether to use gdb')
+
     declare_namespace_cmd = DeclareLaunchArgument(
         'namespace',
         default_value='',
@@ -216,7 +223,8 @@ def generate_launch_description():
                           'params_file': params_file,
                           'autostart': autostart,
                           'bond_timeout': bond_timeout,
-                          'use_composition': use_composition}.items())
+                          'use_composition': use_composition,
+                          'use_debug': use_debug}.items())
 
     # Create the launch description and populate
     ld = LaunchDescription()
@@ -240,6 +248,7 @@ def generate_launch_description():
     ld.add_action(declare_world_cmd)
     ld.add_action(declare_robot_name_cmd)
     ld.add_action(declare_robot_sdf_cmd)
+    ld.add_action(declare_use_debug_cmd)
 
     # Add any conditioned actions
     ld.add_action(start_gazebo_server_cmd)
