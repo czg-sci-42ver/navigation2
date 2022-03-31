@@ -44,7 +44,7 @@
 #include "tf2_ros/buffer.h"
 #include "rclcpp/rclcpp.hpp"
 #include "nav2_costmap_2d/costmap_2d.hpp"
-#include "nav2_costmap_2d/layered_costmap.hpp"
+#include "nav2_costmap_2d/layered_costmap.hpp" // NOLINT
 #include "nav2_util/lifecycle_node.hpp"
 
 namespace nav2_costmap_2d
