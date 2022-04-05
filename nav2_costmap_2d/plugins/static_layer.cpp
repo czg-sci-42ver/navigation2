@@ -42,18 +42,22 @@
 #include <algorithm>
 #include <string>
 
+#include "nav2_costmap_2d/cost_values.hpp"
 #include "pluginlib/class_list_macros.hpp"
 #include "tf2/convert.h"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
 PLUGINLIB_EXPORT_CLASS(nav2_costmap_2d::StaticLayer, nav2_costmap_2d::Layer)
 
-using nav2_costmap_2d::NO_INFORMATION;
-using nav2_costmap_2d::LETHAL_OBSTACLE;
-using nav2_costmap_2d::FREE_SPACE;
+
 
 namespace nav2_costmap_2d
 {
+
+using nav2_costmap_2d::NO_INFORMATION;
+using nav2_costmap_2d::LETHAL_OBSTACLE;
+using nav2_costmap_2d::FREE_SPACE;
+using nav2_costmap_2d::INSCRIBED_INFLATED_OBSTACLE;
 
 StaticLayer::StaticLayer()
 : map_buffer_(nullptr)
@@ -260,6 +264,8 @@ StaticLayer::interpretValue(unsigned char value)
     return LETHAL_OBSTACLE;
   } else if (trinary_costmap_) {
     return FREE_SPACE;
+  } else if (value == 99) {
+    return INSCRIBED_INFLATED_OBSTACLE;
   }
 
   double scale = static_cast<double>(value) / lethal_threshold_;
