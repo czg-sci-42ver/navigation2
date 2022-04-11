@@ -168,10 +168,11 @@ public:
    * @brief Getter function for the current BT tree
    * @return BT::Tree Current behavior tree
    */
-  BT::Tree getTree() const
+  
+  const BT::Tree& getTree() const
   {
     return tree_;
-  }
+  } 
 
   /**
    * @brief Function to halt the current tree. It will interrupt the execution of RUNNING nodes
